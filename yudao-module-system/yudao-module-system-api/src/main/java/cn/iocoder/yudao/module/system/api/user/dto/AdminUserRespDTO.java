@@ -31,4 +31,7 @@ public class AdminUserRespDTO implements VO {
     @Schema(description = "用户头像", requiredMode = Schema.RequiredMode.REQUIRED, example = "https://www.iocoder.cn/1.png")
     private String avatar;
 
+    @Schema(description = "所属租户ID", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    private Long tenantId;
+
 }

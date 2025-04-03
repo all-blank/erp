@@ -165,4 +165,7 @@ ErrorCode PURCHASE_ORDER_ITEM_RETURN_FAIL_IN_EXCEED = new ErrorCode(1_030_101_00
     ErrorCode FINANCE_RECEIPT_NO_EXISTS = new ErrorCode(1_030_602_004, "生成收款单号失败，请重新提交");
     ErrorCode FINANCE_RECEIPT_UPDATE_FAIL_APPROVE = new ErrorCode(1_030_602_005, "收款单({})已审核，无法修改");
 
+    // ========== ERP 审核 1-030-700-000 ==========
+    ErrorCode APPROVAL_FAIL = new ErrorCode(1_030_700_000, "审核失败，权限不足");
+    ErrorCode PROCESS_FAIL = new ErrorCode(1_030_700_001, "反审核失败，权限不足");
 }

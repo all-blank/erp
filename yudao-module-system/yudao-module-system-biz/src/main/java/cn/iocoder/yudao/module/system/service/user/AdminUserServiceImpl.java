@@ -35,6 +35,7 @@ import com.mzt.logapi.service.impl.DiffParseFunction;
 import com.mzt.logapi.starter.annotation.LogRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,6 +62,8 @@ public class AdminUserServiceImpl implements AdminUserService {
 
     static final String USER_INIT_PASSWORD_KEY = "system.user.init-password";
 
+    static final String REDIS_KEY_PREFIX = "approval:permission:";
+
     @Resource
     private AdminUserMapper userMapper;
 
@@ -78,6 +81,9 @@ public class AdminUserServiceImpl implements AdminUserService {
 
     @Resource
     private UserPostMapper userPostMapper;
+
+    @Resource
+    private RedisTemplate<String, Boolean> redisTemplate;
 
     @Resource
     private FileApi fileApi;
@@ -171,6 +177,10 @@ public class AdminUserServiceImpl implements AdminUserService {
         if (!CollectionUtil.isEmpty(deletePostIds)) {
             userPostMapper.deleteByUserIdAndPostId(userId, deletePostIds);
         }
+
+        //  删除缓存职位审批权限缓存 lh
+        String key =  REDIS_KEY_PREFIX + userId;
+        redisTemplate.delete(key);
     }
 
     @Override
