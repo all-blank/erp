@@ -7,6 +7,7 @@ import cn.iocoder.yudao.module.erp.controller.admin.finance.vo.account.ErpAccoun
 import cn.iocoder.yudao.module.erp.controller.admin.finance.vo.account.ErpAccountSaveReqVO;
 import cn.iocoder.yudao.module.erp.dal.dataobject.finance.ErpAccountDO;
 import cn.iocoder.yudao.module.erp.dal.mysql.finance.ErpAccountMapper;
+import cn.iocoder.yudao.module.erp.framework.aop.CheckEditPermission;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -40,6 +41,7 @@ public class ErpAccountServiceImpl implements ErpAccountService {
     }
 
     @Override
+    @CheckEditPermission
     public void updateAccount(ErpAccountSaveReqVO updateReqVO) {
         // 校验存在
         validateAccountExists(updateReqVO.getId());

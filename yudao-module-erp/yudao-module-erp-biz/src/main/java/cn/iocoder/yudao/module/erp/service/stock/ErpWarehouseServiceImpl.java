@@ -8,6 +8,7 @@ import cn.iocoder.yudao.module.erp.controller.admin.stock.vo.warehouse.ErpWareho
 import cn.iocoder.yudao.module.erp.controller.admin.stock.vo.warehouse.ErpWarehousePageReqVO;
 import cn.iocoder.yudao.module.erp.dal.dataobject.stock.ErpWarehouseDO;
 import cn.iocoder.yudao.module.erp.dal.mysql.stock.ErpWarehouseMapper;
+import cn.iocoder.yudao.module.erp.framework.aop.CheckEditPermission;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -45,6 +46,7 @@ public class ErpWarehouseServiceImpl implements ErpWarehouseService {
     }
 
     @Override
+    @CheckEditPermission
     public void updateWarehouse(ErpWarehouseSaveReqVO updateReqVO) {
         // 校验存在
         validateWarehouseExists(updateReqVO.getId());

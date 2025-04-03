@@ -168,4 +168,7 @@ ErrorCode PURCHASE_ORDER_ITEM_RETURN_FAIL_IN_EXCEED = new ErrorCode(1_030_101_00
     // ========== ERP 审核 1-030-700-000 ==========
     ErrorCode APPROVAL_FAIL = new ErrorCode(1_030_700_000, "审核失败，权限不足");
     ErrorCode PROCESS_FAIL = new ErrorCode(1_030_700_001, "反审核失败，权限不足");
+
+    // ========== ERP 编辑 1-030-701-000 ==========
+    ErrorCode EDIT_FAIL = new ErrorCode(1_030_701_000, "编辑失败，权限不足");
 }

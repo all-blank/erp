@@ -6,9 +6,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 校验审批权限注解
+ * 校验编辑权限注解
  */
 @Target(ElementType.METHOD)  // 标注在方法上
 @Retention(RetentionPolicy.RUNTIME) // 运行时生效
-public @interface CheckApprovalPermission {
+public @interface CheckEditPermission {
 }

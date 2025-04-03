@@ -8,6 +8,8 @@ import cn.iocoder.yudao.module.erp.controller.admin.purchase.vo.supplier.ErpSupp
 import cn.iocoder.yudao.module.erp.dal.dataobject.purchase.ErpSupplierDO;
 import cn.iocoder.yudao.module.erp.dal.mysql.purchase.ErpSupplierMapper;
 import javax.annotation.Resource;
+
+import cn.iocoder.yudao.module.erp.framework.aop.CheckEditPermission;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -38,6 +40,7 @@ public class ErpSupplierServiceImpl implements ErpSupplierService {
     }
 
     @Override
+    @CheckEditPermission
     public void updateSupplier(ErpSupplierSaveReqVO updateReqVO) {
         // 校验存在
         validateSupplierExists(updateReqVO.getId());

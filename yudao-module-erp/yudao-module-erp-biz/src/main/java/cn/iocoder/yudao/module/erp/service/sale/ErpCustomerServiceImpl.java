@@ -7,6 +7,7 @@ import cn.iocoder.yudao.module.erp.controller.admin.sale.vo.customer.ErpCustomer
 import cn.iocoder.yudao.module.erp.controller.admin.sale.vo.customer.ErpCustomerSaveReqVO;
 import cn.iocoder.yudao.module.erp.dal.dataobject.sale.ErpCustomerDO;
 import cn.iocoder.yudao.module.erp.dal.mysql.sale.ErpCustomerMapper;
+import cn.iocoder.yudao.module.erp.framework.aop.CheckEditPermission;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -40,6 +41,7 @@ public class ErpCustomerServiceImpl implements ErpCustomerService {
     }
 
     @Override
+    @CheckEditPermission
     public void updateCustomer(ErpCustomerSaveReqVO updateReqVO) {
         // 校验存在
         validateCustomerExists(updateReqVO.getId());
