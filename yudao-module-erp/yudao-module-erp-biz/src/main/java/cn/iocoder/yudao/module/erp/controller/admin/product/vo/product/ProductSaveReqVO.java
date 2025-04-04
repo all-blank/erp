@@ -26,6 +26,9 @@ public class ProductSaveReqVO {
     @NotNull(message = "产品分类编号不能为空")
     private Long categoryId;
 
+    @Schema(description = "产品所属供应商", example = "6")
+    private Long supplierId;
+
     @Schema(description = "单位编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "8869")
     @NotNull(message = "单位编号不能为空")
     private Long unitId;

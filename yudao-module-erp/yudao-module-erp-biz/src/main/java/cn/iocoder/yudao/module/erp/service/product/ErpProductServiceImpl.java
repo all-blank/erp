@@ -11,7 +11,9 @@ import cn.iocoder.yudao.module.erp.controller.admin.product.vo.product.ProductSa
 import cn.iocoder.yudao.module.erp.dal.dataobject.product.ErpProductCategoryDO;
 import cn.iocoder.yudao.module.erp.dal.dataobject.product.ErpProductDO;
 import cn.iocoder.yudao.module.erp.dal.dataobject.product.ErpProductUnitDO;
+import cn.iocoder.yudao.module.erp.dal.dataobject.purchase.ErpSupplierDO;
 import cn.iocoder.yudao.module.erp.dal.mysql.product.ErpProductMapper;
+import cn.iocoder.yudao.module.erp.service.purchase.ErpSupplierService;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -20,6 +22,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertMap;
@@ -43,6 +46,9 @@ public class ErpProductServiceImpl implements ErpProductService {
     private ErpProductCategoryService productCategoryService;
     @Resource
     private ErpProductUnitService productUnitService;
+
+    @Resource
+    private ErpSupplierService supplierService;
 
     @Override
     public Long createProduct(ProductSaveReqVO createReqVO) {
@@ -131,11 +137,15 @@ public class ErpProductServiceImpl implements ErpProductService {
                 convertSet(list, ErpProductDO::getCategoryId));
         Map<Long, ErpProductUnitDO> unitMap = productUnitService.getProductUnitMap(
                 convertSet(list, ErpProductDO::getUnitId));
+        Map<Long, ErpSupplierDO> supplierMap = supplierService.getSupplierMap(
+                convertSet(list, ErpProductDO::getSupplierId));
         return BeanUtils.toBean(list, ErpProductRespVO.class, product -> {
             MapUtils.findAndThen(categoryMap, product.getCategoryId(),
                     category -> product.setCategoryName(category.getName()));
             MapUtils.findAndThen(unitMap, product.getUnitId(),
                     unit -> product.setUnitName(unit.getName()));
+            MapUtils.findAndThen(supplierMap, product.getSupplierId(),
+                    supplier -> product.setSupplierName(supplier.getName()));
         });
     }
 
@@ -147,6 +157,21 @@ public class ErpProductServiceImpl implements ErpProductService {
     @Override
     public Long getProductCountByUnitId(Long unitId) {
         return productMapper.selectCountByUnitId(unitId);
+    }
+
+    //
+    @Override
+    public List<ErpProductRespVO> getProductListBySupplierId(Long supplierId) {
+        // 1、通过供应商id获得产品列表
+        List<ErpProductDO> list = productMapper.selectListBySupplierId(supplierId);
+        // 2、过滤掉 DISENABLE 状态的项
+        List<ErpProductDO> enabledList = list.stream()
+                .filter(product -> {
+                    Integer disableStatus = CommonStatusEnum.DISABLE.getStatus();
+                    return !disableStatus.equals(product.getStatus());
+                })
+                .collect(Collectors.toList());
+        return buildProductVOList(enabledList);
     }
 
 }

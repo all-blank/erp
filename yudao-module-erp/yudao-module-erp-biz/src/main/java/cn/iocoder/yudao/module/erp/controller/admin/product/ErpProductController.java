@@ -89,6 +89,19 @@ public class ErpProductController {
                 .setPurchasePrice(product.getPurchasePrice()).setSalePrice(product.getSalePrice()).setMinPrice(product.getMinPrice())));
     }
 
+    @GetMapping("list-by-supplierId")
+    @Operation(summary = "通过供应商id获得产品列表", description = "只包含被开启的产品，主要用于前端的下拉选项")
+    public CommonResult<List<ErpProductRespVO>> getProductListBySupplierId(@RequestParam("supplierId") Long supplierId) {
+        // 1、通过供应商id获得产品列表（在service层已将未开启状态的产品过滤）
+        List<ErpProductRespVO> list = productService.getProductListBySupplierId(supplierId);
+        return success(convertList(list, product -> new ErpProductRespVO().setId(product.getId())
+                .setName(product.getName()).setBarCode(product.getBarCode())
+                .setCategoryId(product.getCategoryId()).setCategoryName(product.getCategoryName())
+                .setSupplierId(product.getSupplierId()).setSupplierName(product.getSupplierName())
+                .setUnitId(product.getUnitId()).setUnitName(product.getUnitName())
+                .setPurchasePrice(product.getPurchasePrice()).setSalePrice(product.getSalePrice()).setMinPrice(product.getMinPrice())));
+    }
+
     @GetMapping("/export-excel")
     @Operation(summary = "导出产品 Excel")
     @PreAuthorize("@ss.hasPermission('erp:product:export')")

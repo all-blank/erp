@@ -3,6 +3,7 @@ package cn.iocoder.yudao.module.erp.service.purchase;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.module.erp.controller.admin.purchase.vo.supplier.ErpSupplierPageReqVO;
 import cn.iocoder.yudao.module.erp.controller.admin.purchase.vo.supplier.ErpSupplierSaveReqVO;
+import cn.iocoder.yudao.module.erp.dal.dataobject.product.ErpProductCategoryDO;
 import cn.iocoder.yudao.module.erp.dal.dataobject.purchase.ErpSupplierDO;
 import javax.validation.Valid;
 
@@ -90,5 +91,6 @@ public interface ErpSupplierService {
      * @return 供应商列表
      */
     List<ErpSupplierDO> getSupplierListByStatus(Integer status);
+
 
 }

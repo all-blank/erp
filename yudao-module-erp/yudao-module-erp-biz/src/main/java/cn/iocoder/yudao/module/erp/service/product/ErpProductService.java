@@ -108,4 +108,12 @@ public interface ErpProductService {
      */
     Long getProductCountByUnitId(Long unitId);
 
+    /**
+     * 基于供应商编号，获得其下的所有产品
+     *
+     * @param supplierId 供应商编号
+     * @return 产品列表
+     */
+    List<ErpProductRespVO> getProductListBySupplierId(Long supplierId);
+
 }

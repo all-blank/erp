@@ -43,6 +43,11 @@ public class ErpProductDO extends BaseDO {
      */
     private Long categoryId;
     /**
+     * 产品所属供应商
+     */
+    private Long supplierId;
+    /**
+    /**
      * 单位编号
      *
      * 关联 {@link ErpProductUnitDO#getId()}

@@ -23,6 +23,12 @@ public class ErpProductPageReqVO extends PageParam {
     @Schema(description = "产品分类编号", example = "11161")
     private Long categoryId;
 
+    @Schema(description = "产品所属供应商", example = "6")
+    private Long supplierId;
+
+    @Schema(description = "产品条码", example = "6923456789012")
+    private String barCode;
+
     @Schema(description = "创建时间")
     @DateTimeFormat(pattern = FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)
     private LocalDateTime[] createTime;

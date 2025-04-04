@@ -31,6 +31,13 @@ public class ErpProductRespVO {
     @ExcelProperty("产品分类")
     private String categoryName;
 
+    @Schema(description = "产品所属供应商编号", example = "6")
+    @ExcelProperty("产品所属供应商编号")
+    private Long supplierId;
+    @Schema(description = "产品所属供应商", example = "6")
+    @ExcelProperty("产品所属供应商")
+    private String supplierName;
+
     @Schema(description = "单位编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "8869")
     private Long unitId;
     @Schema(description = "单位", requiredMode = Schema.RequiredMode.REQUIRED, example = "个")
