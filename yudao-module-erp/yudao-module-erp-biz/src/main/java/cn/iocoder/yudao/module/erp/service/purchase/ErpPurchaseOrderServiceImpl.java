@@ -15,7 +15,6 @@ import cn.iocoder.yudao.module.erp.dal.mysql.purchase.ErpPurchaseOrderMapper;
 import cn.iocoder.yudao.module.erp.dal.redis.no.ErpNoRedisDAO;
 import cn.iocoder.yudao.module.erp.enums.ErpAuditStatus;
 import cn.iocoder.yudao.module.erp.framework.aop.CheckApprovalPermission;
-import cn.iocoder.yudao.module.erp.service.auth.ApprovalPermissionService;
 import cn.iocoder.yudao.module.erp.service.finance.ErpAccountService;
 import cn.iocoder.yudao.module.erp.service.product.ErpProductService;
 import org.springframework.stereotype.Service;
@@ -58,9 +57,6 @@ public class ErpPurchaseOrderServiceImpl implements ErpPurchaseOrderService {
     private ErpSupplierService supplierService;
     @Resource
     private ErpAccountService accountService;
-
-    @Resource
-    private ApprovalPermissionService approvalPermissionService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)

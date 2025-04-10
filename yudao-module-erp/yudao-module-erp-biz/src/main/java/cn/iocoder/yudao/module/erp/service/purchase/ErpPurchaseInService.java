@@ -98,4 +98,6 @@ public interface ErpPurchaseInService {
      */
     List<ErpPurchaseInItemDO> getPurchaseInItemListByInIds(Collection<Long> inIds);
 
+    List<ErpPurchaseInItemDO> getPurchaseInItemListByOrderItemId(Long orderItemId);
+
 }

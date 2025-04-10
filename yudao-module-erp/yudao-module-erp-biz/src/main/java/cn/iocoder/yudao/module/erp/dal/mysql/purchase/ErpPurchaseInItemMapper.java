@@ -53,4 +53,8 @@ public interface ErpPurchaseInItemMapper extends BaseMapperX<ErpPurchaseInItemDO
         return convertMap(result, obj -> (Long) obj.get("order_item_id"), obj -> (BigDecimal) obj.get("sumCount"));
     }
 
+    default List<ErpPurchaseInItemDO> selectListByOrderItemId(Long orderItemId) {
+        return selectList(ErpPurchaseInItemDO::getOrderItemId, orderItemId);
+    }
+
 }

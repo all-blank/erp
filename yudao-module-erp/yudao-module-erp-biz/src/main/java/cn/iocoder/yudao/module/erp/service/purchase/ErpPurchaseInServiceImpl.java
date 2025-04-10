@@ -68,11 +68,6 @@ public class ErpPurchaseInServiceImpl implements ErpPurchaseInService {
     @Resource
     private ErpStockRecordService stockRecordService;
 
-    @Resource
-    private ApprovalPermissionService approvalPermissionService;
-
-    @Resource
-    private AdminUserApi adminUserApi;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -310,5 +305,11 @@ public class ErpPurchaseInServiceImpl implements ErpPurchaseInService {
         }
         return purchaseInItemMapper.selectListByInIds(inIds);
     }
+
+    @Override
+    public List<ErpPurchaseInItemDO> getPurchaseInItemListByOrderItemId(Long orderItemId) {
+        return purchaseInItemMapper.selectListByOrderItemId(orderItemId);
+    }
+
 
 }

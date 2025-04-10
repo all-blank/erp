@@ -161,7 +161,10 @@ public class ErpPurchaseReturnServiceImpl implements ErpPurchaseReturnService {
         if (purchaseReturn.getStatus().equals(status)) {
             throw exception(approve ? PURCHASE_RETURN_APPROVE_FAIL : PURCHASE_RETURN_PROCESS_FAIL);
         }
-        // 1.3 校验已退款
+        // 1.3 在为审批状态下，校验其对应的入库单是否已经审批，如果未审批，则退货单不能审批，因为
+        // 入库单没有审批的状态下，相应的库存数还没有增加，所以，不能直接从对应仓库减少库存数量
+
+        // 1.4 校验已退款
         if (!approve && purchaseReturn.getRefundPrice().compareTo(BigDecimal.ZERO) > 0) {
             throw exception(PURCHASE_RETURN_PROCESS_FAIL_EXISTS_REFUND);
         }

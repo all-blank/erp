@@ -12,11 +12,11 @@ import cn.iocoder.yudao.module.erp.controller.admin.product.vo.product.ErpProduc
 import cn.iocoder.yudao.module.erp.controller.admin.purchase.vo.returns.ErpPurchaseReturnPageReqVO;
 import cn.iocoder.yudao.module.erp.controller.admin.purchase.vo.returns.ErpPurchaseReturnRespVO;
 import cn.iocoder.yudao.module.erp.controller.admin.purchase.vo.returns.ErpPurchaseReturnSaveReqVO;
-import cn.iocoder.yudao.module.erp.dal.dataobject.purchase.ErpPurchaseReturnDO;
-import cn.iocoder.yudao.module.erp.dal.dataobject.purchase.ErpPurchaseReturnItemDO;
-import cn.iocoder.yudao.module.erp.dal.dataobject.purchase.ErpSupplierDO;
+import cn.iocoder.yudao.module.erp.controller.admin.purchase.vo.returns.ReturnItemRespVO;
+import cn.iocoder.yudao.module.erp.dal.dataobject.purchase.*;
 import cn.iocoder.yudao.module.erp.dal.dataobject.stock.ErpStockDO;
 import cn.iocoder.yudao.module.erp.service.product.ErpProductService;
+import cn.iocoder.yudao.module.erp.service.purchase.ErpPurchaseInService;
 import cn.iocoder.yudao.module.erp.service.purchase.ErpPurchaseReturnService;
 import cn.iocoder.yudao.module.erp.service.purchase.ErpSupplierService;
 import cn.iocoder.yudao.module.erp.service.stock.ErpStockService;
@@ -56,6 +56,9 @@ public class ErpPurchaseReturnController {
     private ErpProductService productService;
     @Resource
     private ErpSupplierService supplierService;
+
+    @Resource
+    private ErpPurchaseInService purchaseInService;
 
     @Resource
     private AdminUserApi adminUserApi;
@@ -134,6 +137,20 @@ public class ErpPurchaseReturnController {
         ExcelUtils.write(response, "采购退货.xls", "数据", ErpPurchaseReturnRespVO.class, list);
     }
 
+    @GetMapping("/get-by-order-item-id")
+    @Operation(summary = "获得采购入库项")
+    @PreAuthorize("@ss.hasPermission('erp:purchase-return:query')")
+    public CommonResult<List<ReturnItemRespVO>> getPurchaseReturnByOrderItemId(@RequestParam("orderItemId") Long orderItemId) {
+        List<ErpPurchaseInItemDO> list = purchaseInService.getPurchaseInItemListByOrderItemId(orderItemId);
+        // 2. 转换为 VO 并补充库存字段
+        return success(BeanUtils.toBean(list, ReturnItemRespVO.class, voItem -> {
+            // 3. 调用库存服务获取当前库存
+            ErpStockDO stock = stockService.getStock(voItem.getProductId(), voItem.getWarehouseId());
+            voItem.setStockCount(stock != null ? stock.getCount() : BigDecimal.ZERO);
+        }));
+    }
+
+
     private PageResult<ErpPurchaseReturnRespVO> buildPurchaseReturnVOPageResult(PageResult<ErpPurchaseReturnDO> pageResult) {
         if (CollUtil.isEmpty(pageResult.getList())) {
             return PageResult.empty(pageResult.getTotal());
@@ -161,5 +178,6 @@ public class ErpPurchaseReturnController {
             MapUtils.findAndThen(userMap, Long.parseLong(purchaseReturn.getCreator()), user -> purchaseReturn.setCreatorName(user.getNickname()));
         });
     }
+
 
 }
