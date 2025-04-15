@@ -1,14 +1,14 @@
 package cn.iocoder.yudao.module.erp.service.analysis;
 
-import cn.iocoder.yudao.module.erp.controller.admin.analysis.vo.ProductVO;
-import cn.iocoder.yudao.module.erp.controller.admin.analysis.vo.WarehouseVO;
+import cn.iocoder.yudao.module.erp.controller.admin.analysis.product.vo.ProductVO;
+import cn.iocoder.yudao.module.erp.controller.admin.analysis.warehouse.vo.WarehouseVO;
 import cn.iocoder.yudao.module.erp.dal.dataobject.analysis.WarehouseStockDO;
-import cn.iocoder.yudao.module.erp.dal.mysql.analysis.WarehouseStockMapper;
+import cn.iocoder.yudao.module.erp.dal.mysql.analysis.AnalysisWarehouseMapper;
+import com.baomidou.dynamic.datasource.annotation.Slave;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,14 +21,15 @@ import java.util.stream.Collectors;
  */
 
 @Service
-public class WarehouseStockServiceImpl implements WarehouseStockService {
+@Slave
+public class AnalysisWarehouseServiceImpl implements AnalysisWarehouseService {
 
     @Resource
-    private WarehouseStockMapper warehouseStockMapper;
+    private AnalysisWarehouseMapper analysisWarehouseMapper;
 
     @Override
     public List<WarehouseVO> getWarehouseStock() {
-        List<WarehouseStockDO> warehouseStockDOList =  warehouseStockMapper.getWarehouseStock();
+        List<WarehouseStockDO> warehouseStockDOList =  analysisWarehouseMapper.getWarehouseStock();
         // 按 warehouseId 分组
         Map<Long, List<WarehouseStockDO>> warehouseGroups = warehouseStockDOList.stream()
                 .collect(Collectors.groupingBy(WarehouseStockDO::getWarehouseId));

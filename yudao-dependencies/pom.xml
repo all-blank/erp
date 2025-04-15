@@ -82,6 +82,7 @@
         <weixin-java.version>4.6.0</weixin-java.version>
         <!-- 专属于 JDK8 安全漏洞升级 -->
         <logback.version>1.2.13</logback.version> <!-- 无法使用 1.3.X 版本，启动会报错 -->
+        <shardingsphere.version>4.1.1</shardingsphere.version>
     </properties>
 
     <dependencyManagement>
@@ -260,6 +261,7 @@
                 <artifactId>yudao-spring-boot-starter-redis</artifactId>
                 <version>${revision}</version>
             </dependency>
+
 
             <dependency>
                 <groupId>com.fhs-opensource</groupId> <!-- VO 数据翻译 -->

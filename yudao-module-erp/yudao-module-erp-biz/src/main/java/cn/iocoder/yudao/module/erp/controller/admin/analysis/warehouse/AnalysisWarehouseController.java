@@ -1,18 +1,13 @@
-package cn.iocoder.yudao.module.erp.controller.admin.analysis;
+package cn.iocoder.yudao.module.erp.controller.admin.analysis.warehouse;
 
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
-import cn.iocoder.yudao.module.erp.controller.admin.analysis.vo.ProductVO;
-import cn.iocoder.yudao.module.erp.controller.admin.analysis.vo.WarehouseVO;
-import cn.iocoder.yudao.module.erp.controller.admin.purchase.vo.in.ErpPurchaseInRespVO;
-import cn.iocoder.yudao.module.erp.service.analysis.WarehouseStockService;
+import cn.iocoder.yudao.module.erp.controller.admin.analysis.warehouse.vo.WarehouseVO;
+import cn.iocoder.yudao.module.erp.service.analysis.AnalysisWarehouseService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -29,14 +24,14 @@ import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
  */
 
 
-@Tag(name = "管理后台 - ERP 仓库产品库存")
+@Tag(name = "管理后台 - ERP 仓库分析")
 @RestController
 @RequestMapping("/erp/analysis")
 @Validated
-public class WarehouseStockController {
+public class AnalysisWarehouseController {
 
     @Resource
-    private WarehouseStockService warehouseStockService;
+    private AnalysisWarehouseService analysisWarehouseService;
 
     @GetMapping("/warehouse-stock")
     @Operation(summary = "查询各仓库产品库存")
@@ -44,7 +39,7 @@ public class WarehouseStockController {
     @PermitAll
     public CommonResult<List<WarehouseVO>> getWarehouseStock() {
 
-        return success(warehouseStockService.getWarehouseStock());
+        return success(analysisWarehouseService.getWarehouseStock());
     }
 
 

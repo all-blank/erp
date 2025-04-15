@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.iocoder.yudao.module.erp.dal.mysql.analysis.AnalysisSaleMapper">
+
+    <select id="getTotalSaleCount" resultType="java.math.BigDecimal">
+        SELECT
+        SUM(orders.out_count - orders.return_count)
+        FROM
+        erp_sale_order orders
+        WHERE
+        orders.status = 20
+        AND orders.order_time BETWEEN #{startTime} AND #{endTime}
+        AND orders.tenant_id = ${@cn.iocoder.yudao.framework.tenant.core.context.TenantContextHolder@getRequiredTenantId()}
+        AND orders.deleted = 0
+    </select>
+
+    <select id="getTotalSales" resultType="java.math.BigDecimal">
+        SELECT
+        (SELECT IFNULL(SUM(total_price), 0)
+        FROM erp_sale_out
+        WHERE out_time >= #{startTime}
+        <if test="endTime != null">
+            AND out_time &lt; #{endTime}
+        </if>
+        AND tenant_id = ${@cn.iocoder.yudao.framework.tenant.core.context.TenantContextHolder@getRequiredTenantId()}
+        AND deleted = 0) -
+        (SELECT IFNULL(SUM(total_price), 0)
+        FROM erp_sale_return
+        WHERE return_time >= #{startTime}
+        <if test="endTime != null">
+            AND return_time &lt; #{endTime}
+        </if>
+        AND tenant_id = ${@cn.iocoder.yudao.framework.tenant.core.context.TenantContextHolder@getRequiredTenantId()}
+        AND deleted = 0)
+    </select>
+
+    <select id="getSaleOrderStatus" resultType="cn.iocoder.yudao.module.erp.dal.dataobject.analysis.SaleOrderStatusDO">
+        SELECT
+        (SELECT COUNT(*)
+        FROM erp_sale_order
+        WHERE order_time BETWEEN #{startTime} AND #{endTime}) AS sale_order_total_count,
+        (SELECT COUNT(*)
+        FROM erp_sale_order
+        WHERE status = 10
+        AND order_time BETWEEN #{startTime} AND #{endTime}) AS no_approval_sale_order_count,
+        (SELECT COUNT(*)
+        FROM erp_sale_out
+        WHERE out_time BETWEEN #{startTime} AND #{endTime}) AS sale_out_order_count,
+        (SELECT COUNT(*)
+        FROM erp_sale_return
+        WHERE return_time BETWEEN #{startTime} AND #{endTime}) AS sale_return_order_count
+    </select>
+</mapper>

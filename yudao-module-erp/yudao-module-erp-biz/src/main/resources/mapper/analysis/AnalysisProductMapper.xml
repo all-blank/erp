@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.iocoder.yudao.module.erp.dal.mysql.analysis.AnalysisProductMapper">
+
+    <select id="getProductSaleCount" resultType="cn.iocoder.yudao.module.erp.dal.dataobject.analysis.ProductSaleCountDO">
+        SELECT
+            items.product_id AS productId,
+            SUM(items.out_count - items.return_count) AS saleCount
+        FROM
+            erp_sale_order orders
+        INNER JOIN
+            erp_sale_order_items items
+            ON orders.id = items.order_id
+        WHERE
+            orders.status = 20
+            AND orders.order_time BETWEEN #{startTime} AND #{endTime}
+            AND orders.tenant_id = ${@cn.iocoder.yudao.framework.tenant.core.context.TenantContextHolder@getRequiredTenantId()}
+            AND items.tenant_id = ${@cn.iocoder.yudao.framework.tenant.core.context.TenantContextHolder@getRequiredTenantId()}
+            AND orders.deleted = 0
+            AND items.deleted = 0
+        GROUP BY
+            items.product_id
+    </select>
+
+    <select id="getTotalSaleCount" resultType="java.math.BigDecimal">
+        SELECT
+        SUM(orders.out_count - orders.return_count)
+        FROM
+        erp_sale_order orders
+        WHERE
+        orders.status = 20
+        AND orders.order_time BETWEEN #{startTime} AND #{endTime}
+        AND orders.tenant_id = ${@cn.iocoder.yudao.framework.tenant.core.context.TenantContextHolder@getRequiredTenantId()}
+        AND orders.deleted = 0
+    </select>
+
+
+    <select id="getProductSales" resultType="cn.iocoder.yudao.module.erp.dal.dataobject.analysis.ProductSalesDO">
+        SELECT
+        i.product_id,
+        SUM(
+        (
+        (i.out_count - i.return_count) * i.product_price * (1 + i.tax_percent / 100)
+        ) * (1 - o.discount_percent / 100)
+        ) AS total_sales
+        FROM
+        erp_sale_order o
+        JOIN
+        erp_sale_order_items i ON o.id = i.order_id
+        WHERE
+        o.status = 20
+        AND o.order_time BETWEEN #{startTime} AND #{endTime}
+        AND i.tenant_id = ${@cn.iocoder.yudao.framework.tenant.core.context.TenantContextHolder@getRequiredTenantId()}
+        AND o.deleted = 0
+        AND i.deleted = 0
+        GROUP BY
+        i.product_id
+        ORDER BY
+        total_sales DESC
+        LIMIT 12;
+    </select>
+
+
+    <select id="getProductStock" resultType="cn.iocoder.yudao.module.erp.dal.dataobject.analysis.ProductStockDO">
+        SELECT
+            p.id AS product_id,
+            p.name AS product_name,
+            COALESCE(SUM(s.count), 0) AS stock_count,
+            u.name AS unit_name
+        FROM
+            erp_product p
+                LEFT JOIN
+            erp_stock s ON p.id = s.product_id
+                LEFT JOIN
+            erp_product_unit u ON p.unit_id = u.id
+        WHERE
+            p.status = 0
+            AND p.tenant_id = ${@cn.iocoder.yudao.framework.tenant.core.context.TenantContextHolder@getRequiredTenantId()}
+            AND s.tenant_id = ${@cn.iocoder.yudao.framework.tenant.core.context.TenantContextHolder@getRequiredTenantId()}
+            AND u.tenant_id = ${@cn.iocoder.yudao.framework.tenant.core.context.TenantContextHolder@getRequiredTenantId()}
+            AND p.deleted = 0
+            AND s.deleted = 0
+            AND u.deleted = 0
+        GROUP BY
+            p.id, p.name, p.unit_id, u.name
+    </select>
+
+
+</mapper>

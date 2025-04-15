@@ -1,5 +1,6 @@
-package cn.iocoder.yudao.module.erp.controller.admin.analysis.vo;
+package cn.iocoder.yudao.module.erp.controller.admin.analysis.warehouse.vo;
 
+import cn.iocoder.yudao.module.erp.controller.admin.analysis.product.vo.ProductVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

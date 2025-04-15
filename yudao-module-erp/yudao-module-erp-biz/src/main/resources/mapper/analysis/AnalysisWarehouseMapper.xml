@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.iocoder.yudao.module.erp.dal.mysql.analysis.AnalysisWarehouseMapper">
+
+    <select id="getWarehouseStock" resultType="cn.iocoder.yudao.module.erp.dal.dataobject.analysis.WarehouseStockDO">
+        SELECT
+            w.id AS warehouse_id,
+            w.name AS warehouse_name,
+            p.id AS product_id,
+            p.name AS product_name,
+            s.count AS stock,
+            pu.name AS unitName,
+            pu.id AS unitId
+        FROM
+            erp_warehouse w
+            JOIN erp_stock s ON w.id = s.warehouse_id
+            JOIN erp_product p ON s.product_id = p.id
+            -- 新增产品单位表关联
+            JOIN erp_product_unit pu ON p.unit_id = pu.id
+        WHERE
+            w.tenant_id = ${@cn.iocoder.yudao.framework.tenant.core.context.TenantContextHolder@getRequiredTenantId()}
+            AND s.tenant_id = ${@cn.iocoder.yudao.framework.tenant.core.context.TenantContextHolder@getRequiredTenantId()}
+            AND p.tenant_id = ${@cn.iocoder.yudao.framework.tenant.core.context.TenantContextHolder@getRequiredTenantId()}
+            AND pu.tenant_id = ${@cn.iocoder.yudao.framework.tenant.core.context.TenantContextHolder@getRequiredTenantId()}
+            AND w.deleted = 0
+            AND s.deleted = 0
+            AND p.deleted = 0
+            AND pu.deleted = 0
+    </select>
+</mapper>
