@@ -15,4 +15,12 @@ public interface RedisKeyConstants {
      */
     String NO = "erp:seq_no:";
 
+    /**
+     * 产品销量额的缓存
+     *
+     * KEY 格式：product_sales_template:{startTime}:{endTime}
+     * VALUE 数据格式 String, 模版信息
+     */
+    String PRODUCT_SALES = "product_sales";
+
 }

@@ -18,7 +18,7 @@ import java.util.List;
 
 import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertList;
 
-@FeignClient(name = ApiConstants.NAME) // TODO 芋艿：fallbackFactory =
+@FeignClient(name = ApiConstants.NAME) // TODO ：fallbackFactory =
 @Tag(name = "RPC 服务 - 字典数据")
 public interface DictDataApi {
 
