@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * @Author: allblank
@@ -24,17 +24,17 @@ public class AnalysisSaleServiceImpl implements AnalysisSaleService {
     private AnalysisSaleMapper analysisSaleMapper;
 
     @Override
-    public BigDecimal getTotalSaleCount(Date startTime, Date endTime) {
+    public BigDecimal getTotalSaleCount(LocalDateTime startTime, LocalDateTime endTime) {
         return analysisSaleMapper.getTotalSaleCount(startTime, endTime);
     }
 
     @Override
-    public BigDecimal getTotalSales(Date startTime, Date endTime) {
+    public BigDecimal getTotalSales(LocalDateTime startTime, LocalDateTime endTime) {
         return analysisSaleMapper.getTotalSales(startTime, endTime);
     }
 
     @Override
-    public SaleOrderStatusDO getSaleOrderStatus(Date startTime, Date endTime) {
+    public SaleOrderStatusDO getSaleOrderStatus(LocalDateTime startTime, LocalDateTime endTime) {
         return analysisSaleMapper.getSaleOrderStatus(startTime, endTime);
     }
 }

@@ -19,8 +19,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -49,7 +51,7 @@ public class AnalysisProductServiceImpl implements AnalysisProductService {
 
 
     @Override
-    public List<ProductSaleCountDO> getProductSaleCount(Date startTime, Date endTime) {
+    public List<ProductSaleCountDO> getProductSaleCount(LocalDateTime startTime, LocalDateTime endTime) {
         return analysisProductMapper.getProductSaleCount(startTime, endTime);
     }
 
@@ -59,7 +61,7 @@ public class AnalysisProductServiceImpl implements AnalysisProductService {
     }
 
     @Override
-    public List<ProductSalesDO> getProductSales(Date startTime, Date endTime) {
+    public List<ProductSalesDO> getProductSales(LocalDateTime startTime, LocalDateTime endTime) {
         return analysisProductMapper.getProductSales(startTime, endTime);
     }
 

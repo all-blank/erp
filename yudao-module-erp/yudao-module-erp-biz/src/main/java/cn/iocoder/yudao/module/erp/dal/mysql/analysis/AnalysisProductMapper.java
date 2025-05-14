@@ -6,8 +6,7 @@ import cn.iocoder.yudao.module.erp.dal.dataobject.analysis.ProductStockDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -16,15 +15,15 @@ public interface AnalysisProductMapper {
 
 
     List<ProductSaleCountDO> getProductSaleCount(
-            @Param("startTime") Date startTime,
-            @Param("endTime") Date endTime
+            @Param("startTime") LocalDateTime startTime,
+            @Param("endTime") LocalDateTime endTime
     );
 
     List<ProductStockDO> getProductStock();
 
     List<ProductSalesDO> getProductSales(
-            @Param("startTime") Date startTime,
-            @Param("endTime") Date endTime
+            @Param("startTime") LocalDateTime startTime,
+            @Param("endTime") LocalDateTime endTime
     );
 
 

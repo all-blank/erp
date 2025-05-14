@@ -18,10 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.annotation.security.PermitAll;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
@@ -49,12 +48,12 @@ public class AnalysisSaleController {
     @PreAuthorize("@ss.hasPermission('erp:analysis:query')")
     @Cacheable(
             value = RedisKeyConstants.ANALYSIS_KEY_PREFIX + RedisKeyConstants.SALE_INFO + "#1d",
-            key = "#startTime.getTime() + ':' + #endTime.getTime()",
-            condition = "#endTime < new java.util.Date()"
+            key = "#startTime.toString() + ':' + #endTime.toString()",
+            condition = "#endTime.isBefore(T(java.time.LocalDateTime).now())"
     )
     public CommonResult<SaleInfoRespVO> getSaleInfo(
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date startTime,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date endTime) {
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime startTime,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endTime) {
 
         SaleInfoRespVO saleInfoRespVO = new SaleInfoRespVO();
         
@@ -80,12 +79,12 @@ public class AnalysisSaleController {
     @PreAuthorize("@ss.hasPermission('erp:analysis:query')")
     @Cacheable(
             value = "saleOrderInfo",
-            key = "#startTime.getTime() + ':' + #endTime.getTime()",
-            condition = "#endTime < new java.util.Date()"
+            key = "#startTime.toString() + ':' + #endTime.toString()",
+            condition = "#endTime.isBefore(T(java.time.LocalDateTime).now())"
     )
     public CommonResult<SaleOrderRespVO> getSaleOrderStatus(
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date startTime,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date endTime) {
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime startTime,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endTime) {
 
         SaleOrderRespVO saleOrderRespVO = new SaleOrderRespVO();
 

@@ -27,6 +27,7 @@ import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -67,12 +68,12 @@ public class AnalysisProductController {
     @PreAuthorize("@ss.hasPermission('erp:analysis:query')")
     @Cacheable(
             value = RedisKeyConstants.ANALYSIS_KEY_PREFIX + RedisKeyConstants.PRODUCT_SALES + "#7d",
-            key = "#startTime.getTime() + ':' + #endTime.getTime()",
-            condition = "#endTime < new java.util.Date()"
+            key = "#startTime.toString() + ':' + #endTime.toString()",
+            condition = "#endTime.isBefore(T(java.time.LocalDateTime).now())"
     )
     public CommonResult<ProductSalesRespVO> getProductSaleInfo(
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date startTime,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date endTime) {
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime startTime,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endTime) {
 
         // 1. 获取销售额数据
         List<ProductSalesDO> productSalesList = analysisProductService.getProductSales(startTime, endTime);
@@ -106,12 +107,12 @@ public class AnalysisProductController {
     @PreAuthorize("@ss.hasPermission('erp:analysis:query')")
     @Cacheable(
             value = RedisKeyConstants.ANALYSIS_KEY_PREFIX + RedisKeyConstants.PRODUCT_SALECOUNT_BASE_DCATEGORY + "#7d",
-            key = "#startTime.getTime() + ':' + #endTime.getTime()",
-            condition = "#endTime < new java.util.Date()"
+            key = "#startTime.toString() + ':' + #endTime.toString()",
+            condition = "#endTime.isBefore(T(java.time.LocalDateTime).now())"
     )
     public CommonResult<ProductSaleCountRespVO> getProductSaleCountBasedCategory(
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date startTime,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date endTime) {
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime startTime,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endTime) {
 
         // 1. 获取销售数据
         List<ProductSaleCountDO> saleData = analysisProductService.getProductSaleCount(startTime, endTime);

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * @Author: allblank
@@ -18,10 +18,10 @@ import java.util.Date;
 public class SaleInfoRespVO {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date startTime;
+    private LocalDateTime startTime;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date endTime;
+    private LocalDateTime endTime;
 
     @Schema(description = "销售数量", requiredMode = Schema.RequiredMode.REQUIRED, example = "3000")
     private Long totalSaleCount;

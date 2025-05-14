@@ -3,6 +3,7 @@ package cn.iocoder.yudao.module.erp.controller.admin.analysis.product.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -17,10 +18,10 @@ import java.util.List;
 public class ProductSaleCountRespVO {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date startTime;
+    private LocalDateTime startTime;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date endTime;
+    private LocalDateTime endTime;
 
     private List<ProductCategoryVO> saleData;
 }
