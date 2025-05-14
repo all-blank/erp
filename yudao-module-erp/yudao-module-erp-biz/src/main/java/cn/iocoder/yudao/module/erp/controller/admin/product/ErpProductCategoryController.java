@@ -9,6 +9,7 @@ import cn.iocoder.yudao.module.erp.controller.admin.product.vo.category.ErpProdu
 import cn.iocoder.yudao.module.erp.controller.admin.product.vo.category.ErpProductCategoryRespVO;
 import cn.iocoder.yudao.module.erp.controller.admin.product.vo.category.ErpProductCategorySaveReqVO;
 import cn.iocoder.yudao.module.erp.dal.dataobject.product.ErpProductCategoryDO;
+import cn.iocoder.yudao.module.erp.dal.redis.RedisKeyConstants;
 import cn.iocoder.yudao.module.erp.service.product.ErpProductCategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,6 +17,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +42,7 @@ public class ErpProductCategoryController {
     @PostMapping("/create")
     @Operation(summary = "创建产品分类")
     @PreAuthorize("@ss.hasPermission('erp:product-category:create')")
+    @CacheEvict(value = RedisKeyConstants.ANALYSIS_KEY_PREFIX + RedisKeyConstants.PRODUCT_INFO_CACHE, key = "'product_info_cache'")
     public CommonResult<Long> createProductCategory(@Valid @RequestBody ErpProductCategorySaveReqVO createReqVO) {
         return success(productCategoryService.createProductCategory(createReqVO));
     }
@@ -46,6 +50,7 @@ public class ErpProductCategoryController {
     @PutMapping("/update")
     @Operation(summary = "更新产品分类")
     @PreAuthorize("@ss.hasPermission('erp:product-category:update')")
+    @CacheEvict(value = RedisKeyConstants.ANALYSIS_KEY_PREFIX + RedisKeyConstants.PRODUCT_INFO_CACHE, key = "'product_info_cache'")
     public CommonResult<Boolean> updateProductCategory(@Valid @RequestBody ErpProductCategorySaveReqVO updateReqVO) {
         productCategoryService.updateProductCategory(updateReqVO);
         return success(true);
@@ -55,6 +60,7 @@ public class ErpProductCategoryController {
     @Operation(summary = "删除产品分类")
     @Parameter(name = "id", description = "编号", required = true)
     @PreAuthorize("@ss.hasPermission('erp:product-category:delete')")
+    @CacheEvict(value = RedisKeyConstants.ANALYSIS_KEY_PREFIX + RedisKeyConstants.PRODUCT_INFO_CACHE, key = "'product_info_cache'")
     public CommonResult<Boolean> deleteProductCategory(@RequestParam("id") Long id) {
         productCategoryService.deleteProductCategory(id);
         return success(true);

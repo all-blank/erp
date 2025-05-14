@@ -38,7 +38,7 @@ public class PermissionServiceImpl implements PermissionService {
     private PostApi postApi;
 
     @Override
-    @Cacheable(value = RedisKeyConstants.PERMISSION_KEY + "#1d", key = "#loginUserId")
+    @Cacheable(value = RedisKeyConstants.PERMISSION_KEY + "#1h", key = "#loginUserId")
     public boolean hasPermission(Long loginUserId) {
 
         // 1. 通过adminUserApi接口获取当前用户信息
