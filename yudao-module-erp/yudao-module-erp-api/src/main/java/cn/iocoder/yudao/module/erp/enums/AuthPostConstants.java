@@ -8,7 +8,7 @@ package cn.iocoder.yudao.module.erp.enums;
  */
 
 
-public class ApprovalAuthConstants {
+public class AuthPostConstants {
 
     public static final String POST_CEO = "ceo" ;
 

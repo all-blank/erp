@@ -5,6 +5,7 @@ import cn.iocoder.yudao.module.erp.controller.admin.analysis.warehouse.vo.Wareho
 import cn.iocoder.yudao.module.erp.service.analysis.AnalysisWarehouseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,8 +36,7 @@ public class AnalysisWarehouseController {
 
     @GetMapping("/warehouse-stock")
     @Operation(summary = "查询各仓库产品库存")
-    // @PreAuthorize("@ss.hasPermission('erp:purchase-in:query')")
-    @PermitAll
+    @PreAuthorize("@ss.hasPermission('erp:analysis:query')")
     public CommonResult<List<WarehouseVO>> getWarehouseStock() {
 
         return success(analysisWarehouseService.getWarehouseStock());

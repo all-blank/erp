@@ -9,6 +9,7 @@ import cn.iocoder.yudao.module.erp.dal.dataobject.analysis.ProductSalesDO;
 import cn.iocoder.yudao.module.erp.dal.dataobject.analysis.ProductStockDO;
 import cn.iocoder.yudao.module.erp.dal.dataobject.product.ErpProductCategoryDO;
 import cn.iocoder.yudao.module.erp.dal.mysql.analysis.AnalysisProductMapper;
+import cn.iocoder.yudao.module.erp.dal.redis.RedisKeyConstants;
 import cn.iocoder.yudao.module.erp.service.analysis.DTO.CategoryInfoDTO;
 import cn.iocoder.yudao.module.erp.service.analysis.DTO.ProductInfoDTO;
 import cn.iocoder.yudao.module.erp.service.product.ErpProductCategoryService;
@@ -63,11 +64,9 @@ public class AnalysisProductServiceImpl implements AnalysisProductService {
     }
 
 
-
-
     // 查询所有产品及其一级分类和单位，并缓存到 Redis
     @Override
-    @Cacheable(value = "productInfoCache", key = "'productInfo'")
+    @Cacheable(value = RedisKeyConstants.ANALYSIS_KEY_PREFIX + RedisKeyConstants.PRODUCT_INFO_CACHE + "#10d", key = "'product_info_cache'")
     public List<ProductInfoDTO> getProductInfo() {
         // 1. 查询启用的产品列表
         List<ErpProductRespVO> products = productService.getProductVOListByStatus(CommonStatusEnum.ENABLE.getStatus());

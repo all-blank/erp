@@ -2,15 +2,15 @@ package cn.iocoder.yudao.module.erp.controller.admin.analysis.sale;
 
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
-import cn.iocoder.yudao.module.erp.controller.admin.analysis.product.vo.ProductSalesRespVO;
 import cn.iocoder.yudao.module.erp.controller.admin.analysis.sale.vo.SaleInfoRespVO;
 import cn.iocoder.yudao.module.erp.controller.admin.analysis.sale.vo.SaleOrderRespVO;
+import cn.iocoder.yudao.module.erp.dal.redis.RedisKeyConstants;
 import cn.iocoder.yudao.module.erp.service.analysis.AnalysisSaleService;
-import cn.iocoder.yudao.module.erp.service.statistics.ErpSaleStatisticsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,9 +46,9 @@ public class AnalysisSaleController {
 
     @GetMapping("/sale-info")
     @Operation(summary = "查询销售数量和销售额")
-    @PermitAll
+    @PreAuthorize("@ss.hasPermission('erp:analysis:query')")
     @Cacheable(
-            value = "saleInfo",
+            value = RedisKeyConstants.ANALYSIS_KEY_PREFIX + RedisKeyConstants.SALE_INFO + "#1d",
             key = "#startTime.getTime() + ':' + #endTime.getTime()",
             condition = "#endTime < new java.util.Date()"
     )
@@ -74,9 +74,10 @@ public class AnalysisSaleController {
     }
 
 
+    // TODO 思考是否需要缓存？
     @GetMapping("/sale-order-info")
     @Operation(summary = "查询销售订单信息")
-    @PermitAll
+    @PreAuthorize("@ss.hasPermission('erp:analysis:query')")
     @Cacheable(
             value = "saleOrderInfo",
             key = "#startTime.getTime() + ':' + #endTime.getTime()",

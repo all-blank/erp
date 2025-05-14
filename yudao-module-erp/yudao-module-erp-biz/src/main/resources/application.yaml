@@ -34,8 +34,7 @@ spring:
   cache:
     type: REDIS
     redis:
-      time-to-live: 7d # 设置过期时间
-      key-prefix: "erp:analysis:"
+      time-to-live: 1h # 设置过期时间
 
 server:
   port: 48088

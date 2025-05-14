@@ -8,6 +8,7 @@ import cn.iocoder.yudao.module.erp.controller.admin.analysis.product.vo.ProductV
 import cn.iocoder.yudao.module.erp.dal.dataobject.analysis.ProductSaleCountDO;
 import cn.iocoder.yudao.module.erp.dal.dataobject.analysis.ProductSalesDO;
 import cn.iocoder.yudao.module.erp.dal.dataobject.analysis.ProductStockDO;
+import cn.iocoder.yudao.module.erp.dal.redis.RedisKeyConstants;
 import cn.iocoder.yudao.module.erp.service.analysis.AnalysisProductService;
 import cn.iocoder.yudao.module.erp.service.analysis.DTO.ProductInfoDTO;
 import cn.iocoder.yudao.module.erp.service.analysis.converter.ProductConverter;
@@ -15,6 +16,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.format.annotation.DateTimeFormat;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,7 +55,7 @@ public class AnalysisProductController {
 
     @GetMapping("/product-stock")
     @Operation(summary = "查询产品库存")
-    @PermitAll
+    @PreAuthorize("@ss.hasPermission('erp:analysis:query')")
     public CommonResult<List<ProductVO>> getProductStock() {
         List<ProductStockDO> productStock = analysisProductService.getProductStock();
         return success(ProductConverter.convertToVOList(productStock));
@@ -62,9 +64,9 @@ public class AnalysisProductController {
 
     @GetMapping("/product-sales")
     @Operation(summary = "获取产品销售额信息")
-    @PermitAll
+    @PreAuthorize("@ss.hasPermission('erp:analysis:query')")
     @Cacheable(
-            value = "productSales",
+            value = RedisKeyConstants.ANALYSIS_KEY_PREFIX + RedisKeyConstants.PRODUCT_SALES + "#7d",
             key = "#startTime.getTime() + ':' + #endTime.getTime()",
             condition = "#endTime < new java.util.Date()"
     )
@@ -101,9 +103,9 @@ public class AnalysisProductController {
 
     @GetMapping("/product-sale-count-based-category")
     @Operation(summary = "获取产品销量（根据产品分类进行分组）")
-    @PermitAll
+    @PreAuthorize("@ss.hasPermission('erp:analysis:query')")
     @Cacheable(
-            value = "productSaleCountBasedCategory",
+            value = RedisKeyConstants.ANALYSIS_KEY_PREFIX + RedisKeyConstants.PRODUCT_SALECOUNT_BASE_DCATEGORY + "#7d",
             key = "#startTime.getTime() + ':' + #endTime.getTime()",
             condition = "#endTime < new java.util.Date()"
     )
